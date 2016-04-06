@@ -4,7 +4,7 @@ let http = require('http');
 let express = require('express');
 let app = express();
 
-app.listen(process.env.PORT || 4000);
+app.listen(process.env.PORT || 3001);
 
 let mongoUtil = require("./mongo/mongoUtil");
 mongoUtil.connect();
@@ -17,4 +17,3 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/cats', require('./cats/catRoute'));
-app.use('/api/owners', require('./owners/ownerRoute'));
