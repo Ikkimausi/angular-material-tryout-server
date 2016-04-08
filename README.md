@@ -1,24 +1,14 @@
-# angular-material-tryout-server
+# angular-tryout-server-mongodb
 
 Attributen Cat
     - naam
     - geboortedatum
     - geslacht
-    - gesteriliseerd
+    - gecastreerd
     - ras
-    - medicijnen
+    - medicatie
     - dierenarts
     - eigenaar
-    - foto
     - voeding
     - gedrag
-Attributen Owner
-    - naam
-    - adres
-    - telefoonnummer
-    - email
-    - noodnummer
-Attributen Registration
-    - van_tot
-    - cat
-    - owner
+    - foto
