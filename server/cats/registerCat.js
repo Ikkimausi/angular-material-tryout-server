@@ -1,13 +1,12 @@
 'use strict';
 
-let mongoUtil = require("../mongo/mongoUtil");
+let mongoUtil = require("../util/mongoUtil");
+let catUtil = require("../util/catUtil");
 let uploadUtil = require("../util/uploadUtil");
 
 module.exports = function (request, response) {
-	let cat = request.body;
+	let cat = catUtil.prepare(request.body);
 	let part = request.files.file;
 
-	cat.gecastreerd = cat.gecastreerd === 'true';
-
-	return uploadUtil(cat, part, mongoUtil.cats(), mongoUtil.catFileDb(), response);
+	return uploadUtil.insertCat(cat, part, mongoUtil.cats(), mongoUtil.catFileDb(), response);
 };

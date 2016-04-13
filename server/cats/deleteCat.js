@@ -1,6 +1,6 @@
 'use strict';
 
-let mongoUtil = require("../mongo/mongoUtil");
+let mongoUtil = require("../util/mongoUtil");
 let deleteUtil = require("../util/deleteUtil");
 
 module.exports = function (request, response) {
@@ -8,5 +8,5 @@ module.exports = function (request, response) {
 	let cats = mongoUtil.cats();
 	let catFileDb = mongoUtil.catFileDb();
 
-	return deleteUtil(catId, cats, catFileDb, response);
+	return deleteUtil.deleteCat(catId, cats, catFileDb, response);
 };

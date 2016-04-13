@@ -6,7 +6,7 @@ let app = express();
 
 app.listen(process.env.PORT || 3001);
 
-let mongoUtil = require("./mongo/mongoUtil");
+let mongoUtil = require("./util/mongoUtil");
 mongoUtil.connect();
 
 app.use(function (req, res, next) {

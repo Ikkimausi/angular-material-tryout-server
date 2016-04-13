@@ -4,7 +4,6 @@ let fileSystem = require('fs');
 let mongo = require("mongodb");
 let client = mongo.MongoClient;
 let catFileDb;
-let ownerFileDb;
 let _db;
 
 module.exports = {
@@ -17,7 +16,6 @@ module.exports = {
 			}
 			_db = db;
 			catFileDb = new mongo.GridFSBucket(db, {bucketName: "cats"});
-			ownerFileDb = new mongo.GridFSBucket(db, {bucketName: "owners"});
 			console.log("Connected to Mongo");
 		});
 	},
@@ -27,16 +25,10 @@ module.exports = {
 	catFileDb: function () {
 		return catFileDb;
 	},
-	ownerFileDb: function () {
-		return ownerFileDb;
-	},
 	searchById: function (id) {
 		return {_id: new mongo.ObjectID(id)};
 	},
 	cats: function () {
 		return _db.collection("cats");
-	},
-	owners: function () {
-		return _db.collection("owners");
 	}
 };

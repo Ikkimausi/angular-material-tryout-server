@@ -1,6 +1,6 @@
 'use strict';
 
-let mongoUtil = require("../mongo/mongoUtil");
+let mongoUtil = require("../util/mongoUtil");
 let downloadUtil = require("../util/downloadUtil");
 
 module.exports = function (request, response) {

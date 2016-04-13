@@ -1,20 +1,18 @@
 'use strict';
 
-let mongoUtil = require("../mongo/mongoUtil");
+let mongoUtil = require("../util/mongoUtil");
 
-module.exports = function (itemId, collection, itemFileDb, response) {
-	let deleteItem = function () {
-		collection.deleteOne(
-			mongoUtil.searchById(itemId),
-			function (err, results) {
-				if (err) {
-					return response.status(400).send(err);
-				}
-				return response.json(results);
+function deleteItemFromCollection(collection, itemId, response) {
+	collection.deleteOne(mongoUtil.searchById(itemId), function (err, results) {
+			if (err) {
+				return response.status(400).send(err);
 			}
-		);
-	};
+			return response.json(results);
+		}
+	);
+}
 
+function deleteFile(itemFileDb, itemId, response, callback) {
 	itemFileDb.find({filename: itemId}).toArray(function (err, documents) {
 		if (err) {
 			return response.status(400).send(err);
@@ -22,14 +20,23 @@ module.exports = function (itemId, collection, itemFileDb, response) {
 		let doc = documents[0]; // should only be one!
 
 		if (!doc) { // none found, delete item
-			return deleteItem();
+			return callback();
 		}
 
 		itemFileDb.delete(doc._id, function (err) { // delete image
 			if (err) {
 				return response.status(400).send(err);
 			}
-			deleteItem(); // delete item after image deletion
+			callback(); // delete item after image deletion
 		});
 	});
+}
+
+module.exports = {
+	deleteFile: deleteFile,
+	deleteCat: function (itemId, collection, itemFileDb, response) {
+		deleteFile(itemFileDb, itemId, response, function () {
+			return deleteItemFromCollection(collection, itemId, response);
+		});
+	}
 };

@@ -1,8 +1,8 @@
 'use strict';
 
-let mongoUtil = require("../mongo/mongoUtil");
+let mongoUtil = require("../util/mongoUtil");
 
-module.exports = function (item, file, collection, itemFileDb, response) {
+function insertItem(collection, item, response, resultHandler) {
 	if (!item) {
 		return response.status(400).send("Something went wrong!");
 	}
@@ -12,18 +12,30 @@ module.exports = function (item, file, collection, itemFileDb, response) {
 			return response.status(400).send(err);
 		}
 
-		if (!file) {
-			return response.status(200).send(doc);
-		}
-
-		let itemId = doc.insertedId.toString();
-		let readStream = mongoUtil.fileSystem().createReadStream(file.path);
-		let uploadStream = readStream.pipe(itemFileDb.openUploadStream(itemId));
-		uploadStream.on('error', function (error) {
-			return response.status(400).send(error);
-		});
-		uploadStream.on('finish', function () {
-			return response.status(200).send(doc);
-		});
+		resultHandler(doc.insertedId.toString());
 	});
+}
+
+function uploadFile(itemFileDb, file, itemId, response) {
+	if (!file) {
+		return response.status(200).send(itemId);
+	}
+
+	let readStream = mongoUtil.fileSystem().createReadStream(file.path);
+	let uploadStream = readStream.pipe(itemFileDb.openUploadStream(itemId));
+	uploadStream.on('error', function (error) {
+		return response.status(400).send(error);
+	});
+	uploadStream.on('finish', function () {
+		return response.status(200).send(itemId);
+	});
+}
+
+module.exports = {
+	uploadFile: uploadFile,
+	insertCat: function (item, file, collection, itemFileDb, response) {
+		insertItem(collection, item, response, function (itemId) {
+			return uploadFile(itemFileDb, file, itemId, response);
+		});
+	}
 };
