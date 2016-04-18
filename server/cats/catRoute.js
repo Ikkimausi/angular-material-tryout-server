@@ -5,8 +5,7 @@ let router = express.Router();
 let multiparty = require('connect-multiparty');
 let multipartyMiddleware = multiparty();
 
-router
-	.route("/")
+router.route("/")
 	.get(require('./getCats'))
 	.post(multipartyMiddleware, require('./registerCat'));
 
