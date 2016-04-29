@@ -4,7 +4,7 @@ let mongoUtil = require("../util/mongoUtil");
 
 function insertItem(collection, item, response, resultHandler) {
 	if (!item) {
-		return response.status(400).send("Something went wrong!");
+		return response.status(400).json({error: "Something went wrong!"});
 	}
 
 	collection.insertOne(item, function (err, doc) {
@@ -18,7 +18,7 @@ function insertItem(collection, item, response, resultHandler) {
 
 function uploadFile(itemFileDb, file, itemId, response) {
 	if (!file) {
-		return response.status(200).send(itemId);
+		return response.status(200).json({itemId: itemId});
 	}
 
 	let readStream = mongoUtil.fileSystem().createReadStream(file.path);
@@ -27,7 +27,7 @@ function uploadFile(itemFileDb, file, itemId, response) {
 		return response.status(400).send(error);
 	});
 	uploadStream.on('finish', function () {
-		return response.status(200).send(itemId);
+		return response.status(200).json({itemId: itemId});
 	});
 }
 

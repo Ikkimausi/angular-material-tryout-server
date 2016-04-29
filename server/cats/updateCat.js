@@ -12,7 +12,7 @@ module.exports = function (request, response) {
 	let props = changes ? Object.getOwnPropertyNames(changes) : null;
 
 	if (!props && !file) { // No changes and no new file
-		return response.sendStatus(200);
+		return response.status(200).json({});
 	}
 
 	if (!props || props.length == 0) { // no changes => update file
@@ -38,5 +38,5 @@ function updateFile(catId, file, response) {
 			uploadUtil.uploadFile(itemFileDb, file, catId, response);
 		});
 	} // No file => return okay
-	return response.sendStatus(200);
+	return response.status(200).json({});
 }
